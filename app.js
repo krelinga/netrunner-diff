@@ -31,7 +31,7 @@ function parseDeckMarkdown(markdown) {
         }
     }
     const lines = markdown.split(/\r?\n/)
-    parsed = []
+    let parsed = []
     for (const line of lines) {
         const result = parseOneLine(line)
         if (result != null) {
@@ -43,8 +43,35 @@ function parseDeckMarkdown(markdown) {
     return parsed
 }
 
+function diffDecks(oldDeck, newDeck) {
+    function addDeckToAggregate(deck, name, aggregate) {
+        for (const card of deck) {
+            let found = aggregate[card.name]
+            if (!found) {
+                // we need to create a new entry in the aggregate.
+                found = {
+                    name: card.name,
+                    id: card.id,
+                    decks: {}
+                }
+                aggregate[card.name] = found
+            }
+            found.decks[name] = {
+                count: card.count
+            }
+        }
+    }
+    let aggregate = {}
+    addDeckToAggregate(oldDeck, "old", aggregate)
+    addDeckToAggregate(newDeck, "new", aggregate)
+    return aggregate
+}
+
 window.addEventListener("load", () => {
     goButton().addEventListener("click", () => {
-        result().innerHTML = JSON.stringify(parseDeckMarkdown(oldDeck().value))
+        const oldDeckCards = parseDeckMarkdown(oldDeck().value)
+        const newDeckCards = parseDeckMarkdown(newDeck().value)
+        const diff = diffDecks(oldDeckCards, newDeckCards)
+        result().innerHTML = JSON.stringify(diff)
     })
 });
