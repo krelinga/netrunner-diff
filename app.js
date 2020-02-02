@@ -64,7 +64,7 @@ function parseDeckMarkdown(markdown) {
         if (result != null) {
             parsed.push(result)
         } else {
-            console.warn("could not parse line: [%s]", line)
+            console.log("could not parse line: [%s]", line)
         }
     }
     return parsed
