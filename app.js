@@ -105,7 +105,7 @@ function diffDecks(oldDeck, newDeck) {
         }
         return out
     }
-    let aggregate = {}
+    const aggregate = {}
     addDeckToAggregate(oldDeck, oldField, aggregate)
     addDeckToAggregate(newDeck, newField, aggregate)
     normalizeCounts(aggregate)
