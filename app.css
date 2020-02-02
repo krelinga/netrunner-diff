@@ -1,3 +1,4 @@
-body {
-    background-color: green;
+textarea {
+    resize: none;
+    width: 49%;
 }
