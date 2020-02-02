@@ -128,7 +128,7 @@ function renderDiff(diff) {
         const delta = card.decks.new.count - card.decks.old.count
         const target = delta < 0 ? toRemoveLines : toAddLines
         const absDelta = Math.abs(delta)
-        target.push(`${absDelta}x ${card.name}`)
+        target.push(`${absDelta}x <a href="https://netrunnerdb.com/en/card/${card.id}">${card.name}</a>`)
     }
 
     let newStuff = ""
