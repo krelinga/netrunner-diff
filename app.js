@@ -44,6 +44,8 @@ function parseDeckMarkdown(markdown) {
 }
 
 function diffDecks(oldDeck, newDeck) {
+    const oldField = "old"
+    const newField = "new"
     function addDeckToAggregate(deck, name, aggregate) {
         for (const card of deck) {
             let found = aggregate[card.name]
@@ -61,9 +63,23 @@ function diffDecks(oldDeck, newDeck) {
             }
         }
     }
+    function normalizeCounts(aggregate) {
+        function normalizeOne(card, field) {
+            if (!card.decks[field]) {
+                card.decks[field] = {
+                    count: 0
+                }
+            }
+        }
+        for (const card in aggregate) {
+            normalizeOne(aggregate[card], oldField)
+            normalizeOne(aggregate[card], newField)
+        }
+    }
     let aggregate = {}
-    addDeckToAggregate(oldDeck, "old", aggregate)
-    addDeckToAggregate(newDeck, "new", aggregate)
+    addDeckToAggregate(oldDeck, oldField, aggregate)
+    addDeckToAggregate(newDeck, newField, aggregate)
+    normalizeCounts(aggregate)
     return aggregate
 }
 
