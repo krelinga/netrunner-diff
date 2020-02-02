@@ -76,11 +76,21 @@ function diffDecks(oldDeck, newDeck) {
             normalizeOne(aggregate[card], newField)
         }
     }
+    function dropEntriesWithNoDiff(aggregate) {
+        const out = {}
+        for (const card in aggregate) {
+            if (aggregate[card].decks[oldField].count !=
+                aggregate[card].decks[newField].count) {
+                out[card] = aggregate[card]
+            }
+        }
+        return out
+    }
     let aggregate = {}
     addDeckToAggregate(oldDeck, oldField, aggregate)
     addDeckToAggregate(newDeck, newField, aggregate)
     normalizeCounts(aggregate)
-    return aggregate
+    return dropEntriesWithNoDiff(aggregate)
 }
 
 window.addEventListener("load", () => {
