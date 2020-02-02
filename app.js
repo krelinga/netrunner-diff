@@ -123,24 +123,31 @@ function diffDecks(oldDeck, newDeck) {
 function renderDiff(diff) {
     const toAddLines = []
     const toRemoveLines = []
+    let toAddCount = 0
+    let toRemoveCount = 0
     for (cardName in diff) {
         const card = diff[cardName]
         const delta = card.decks.new.count - card.decks.old.count
         const target = delta < 0 ? toRemoveLines : toAddLines
         const absDelta = Math.abs(delta)
         target.push(`${absDelta}x <a href="https://netrunnerdb.com/en/card/${card.id}">${card.name}</a>`)
+        if (delta < 0) {
+            toRemoveCount += absDelta
+        } else {
+            toAddCount += absDelta
+        }
     }
 
     let newStuff = ""
     if (toRemoveLines.length > 0) {
-        newStuff += "<h1>Cards To Remove</h1><ul>"
+        newStuff += `<h1>${toRemoveCount} Cards To Remove</h1><ul>`
         for (const line of toRemoveLines) {
             newStuff += `<li>${line}</li>`
         }
         newStuff += "</ul>"
     }
     if (toAddLines.length > 0) {
-        newStuff += "<h1>Cards To Add</h1><ul>"
+        newStuff += `<h1>${toAddCount} Cards To Add</h1><ul>`
         for (const line of toAddLines) {
             newStuff += `<li>${line}</li>`
         }
