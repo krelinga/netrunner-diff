@@ -16,6 +16,20 @@ function result() {
 
 function parseDeckMarkdown(markdown) {
     function parseOneLine(line) {
+        function matchIdentityCard(line) {
+            const matches =
+                line.match(/^\[([^\]]+)\]\(https:\/\/netrunnerdb.com\/en\/card\/(\d+)/)
+            if (matches == null) return null
+            if (matches.length != 3) return null
+            if (matches[0] == null) return null
+            if (matches[1] == null) return null
+            if (matches[2] == null) return null
+            return {
+                name: matches[1],
+                count: 1,
+                id: matches[2]
+            }
+        }
         function matchNormalCard(line) {
             const matches =
                 line.match(/^\s*\*\s*(\d+)\s*x\s*\[([^\]]+)\]\(https:\/\/netrunnerdb.com\/en\/card\/(\d+)/)
@@ -31,6 +45,8 @@ function parseDeckMarkdown(markdown) {
                 id: matches[3]
             }
         }
+        const identity = matchIdentityCard(line)
+        if (identity) return identity
         return matchNormalCard(line)
     }
     const lines = markdown.split(/\r?\n/)
