@@ -14,6 +14,14 @@ function result() {
     return document.getElementById("result")
 }
 
+function toAdd() {
+    return document.getElementById("toAdd")
+}
+
+function toRemove() {
+    return document.getElementById("toRemove")
+}
+
 function parseDeckMarkdown(markdown) {
     function parseOneLine(line) {
         function matchIdentityCard(line) {
@@ -112,11 +120,51 @@ function diffDecks(oldDeck, newDeck) {
     return dropEntriesWithNoDiff(aggregate)
 }
 
+function renderDiff(diff) {
+    const toAddLines = []
+    const toRemoveLines = []
+    for (cardName in diff) {
+        const card = diff[cardName]
+        const delta = card.decks.new.count - card.decks.old.count
+        const target = delta < 0 ? toRemoveLines : toAddLines
+        const absDelta = Math.abs(delta)
+        target.push(`${absDelta}x ${card.name}`)
+    }
+
+    let newStuff = ""
+    if (toRemoveLines.length > 0) {
+        newStuff += "<h1>Cards To Remove</h1><ul>"
+        for (const line of toRemoveLines) {
+            newStuff += `<li>${line}</li>`
+        }
+        newStuff += "</ul>"
+    }
+    if (toAddLines.length > 0) {
+        newStuff += "<h1>Cards To Add</h1><ul>"
+        for (const line of toAddLines) {
+            newStuff += `<li>${line}</li>`
+        }
+        newStuff += "</ul>"
+    }
+
+    if (newStuff == "") {
+        newStuff = "<h1>No Differences!</h1>"
+    }
+
+    result().innerHTML = newStuff
+    result().style.display = "block"
+}
+
 window.addEventListener("load", () => {
+    function hideResults() {
+        result().style.display = "none"
+    }
+    newDeck().addEventListener("input", hideResults)
+    oldDeck().addEventListener("input", hideResults)
     goButton().addEventListener("click", () => {
         const oldDeckCards = parseDeckMarkdown(oldDeck().value)
         const newDeckCards = parseDeckMarkdown(newDeck().value)
         const diff = diffDecks(oldDeckCards, newDeckCards)
-        result().innerHTML = JSON.stringify(diff)
+        renderDiff(diff)
     })
 });

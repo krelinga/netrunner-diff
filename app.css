@@ -3,3 +3,8 @@ textarea {
     width: 49%;
     height: 200px;
 }
+
+/* result starts invisible, will change with JS later */
+#result {
+    display: none;
+}
