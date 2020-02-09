@@ -4,13 +4,16 @@
         <script src="app.js"></script>
     </head>
     <body>
-        <div>
-            <textarea id="oldDeck" placeholder="Old Deck Markdown"></textarea>
-            <textarea id="newDeck" placeholder="New Deck Markdown"></textarea>
+        <div id="loading">Loading Cards from NetrunnerDB, please wait...</div>
+        <div id="mainApp">
+            <div>
+                <textarea id="oldDeck" placeholder="Old Deck Markdown"></textarea>
+                <textarea id="newDeck" placeholder="New Deck Markdown"></textarea>
+            </div>
+            <div>
+                <button id="go">Go!</button>
+            </div>
+            <div id="result"></div>
         </div>
-        <div>
-            <button id="go">Go!</button>
-        </div>
-        <div id="result"></div>
     </body>
 </html>

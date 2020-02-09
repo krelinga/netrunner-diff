@@ -1,3 +1,11 @@
+function loading() {
+    return document.getElementById("loading")
+}
+
+function mainApp() {
+    return document.getElementById("mainApp")
+}
+
 function oldDeck() {
     return document.getElementById("oldDeck")
 }
@@ -162,6 +170,20 @@ function renderDiff(diff) {
     result().style.display = "block"
 }
 
+let cardsDb = null
+
+function loadCardsDb() {
+    fetch("https://netrunnerdb.com/api/2.0/public/cards")
+        .then((response) => {
+            return response.json()
+        })
+        .then((myJson) => {
+            cardsDb = myJson
+            loading().style.display = "none"
+            mainApp().style.display = "block"
+        });
+}
+
 window.addEventListener("load", () => {
     function hideResults() {
         result().style.display = "none"
@@ -174,4 +196,5 @@ window.addEventListener("load", () => {
         const diff = diffDecks(oldDeckCards, newDeckCards)
         renderDiff(diff)
     })
+    loadCardsDb()
 });

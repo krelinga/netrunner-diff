@@ -3,3 +3,8 @@ textarea {
     width: 49%;
     height: 200px;
 }
+
+/* mainApp div starts out invisible as we wait for javascript to fetch cards. */
+#mainApp {
+    display: none;
+}
