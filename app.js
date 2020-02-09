@@ -138,7 +138,9 @@ function renderDiff(diff) {
         const delta = card.decks.new.count - card.decks.old.count
         const target = delta < 0 ? toRemoveLines : toAddLines
         const absDelta = Math.abs(delta)
-        target.push(`${absDelta}x <a href="https://netrunnerdb.com/en/card/${card.id}">${card.name}</a>`)
+        const cardData = getCard(card.id)
+        const faction = cardData ? cardData.faction_code : "Unknown"
+        target.push(`${absDelta}x <a href="https://netrunnerdb.com/en/card/${card.id}">${card.name}</a> ${faction}`)
         if (delta < 0) {
             toRemoveCount += absDelta
         } else {
@@ -183,6 +185,14 @@ function loadCardsDb() {
             mainApp().style.display = "block"
         });
 }
+
+function getCard(cardId) {
+    for (const card of cardsDb.data) {
+        if (card.code == cardId) return card
+    }
+    return null
+}
+
 
 window.addEventListener("load", () => {
     function hideResults() {
