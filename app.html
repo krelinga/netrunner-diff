@@ -1,6 +1,20 @@
 <html>
     <head>
         <link rel="stylesheet" type="text/css" href="app.css">
+        <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js"></script>
+        <script id="cardListTemplate" type="text/x-handlebars-template">
+            <h1>{{total}} Cards To {{kind}}</h1>
+            <ul>
+                {{#each cards}}
+                    <li>
+                        {{this.delta}}x
+                        <a href="https://netrunnerdb.com/en/card/{{this.id}}">
+                            {{this.name}}</a>
+                        {{this.faction}}
+                    </li>
+                {{/each}}
+            </ul>
+        </script>
         <script src="app.js"></script>
     </head>
     <body>

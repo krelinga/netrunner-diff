@@ -129,6 +129,23 @@ function diffDecks(oldDeck, newDeck) {
 }
 
 function renderDiff(diff) {
+    function makeRenderCard(id, name, delta, faction) {
+        return {
+            id: id,
+            name: name,
+            delta: delta,
+            faction: faction
+        }
+    }
+
+    function makeRenderDict(kind, total, cards) {
+        return {
+            kind: kind,
+            total: total,
+            cards: cards
+        }
+    }
+
     const toAddLines = []
     const toRemoveLines = []
     let toAddCount = 0
@@ -140,28 +157,21 @@ function renderDiff(diff) {
         const absDelta = Math.abs(delta)
         const cardData = getCard(card.id)
         const faction = cardData ? cardData.faction_code : "Unknown"
-        target.push(`${absDelta}x <a href="https://netrunnerdb.com/en/card/${card.id}">${card.name}</a> ${faction}`)
         if (delta < 0) {
             toRemoveCount += absDelta
         } else {
             toAddCount += absDelta
         }
+        target.push(makeRenderCard(card.id, card.name, absDelta, faction))
     }
 
+    const template = Handlebars.compile(document.getElementById("cardListTemplate").innerHTML)
     let newStuff = ""
     if (toRemoveLines.length > 0) {
-        newStuff += `<h1>${toRemoveCount} Cards To Remove</h1><ul>`
-        for (const line of toRemoveLines) {
-            newStuff += `<li>${line}</li>`
-        }
-        newStuff += "</ul>"
+        newStuff += template(makeRenderDict("Remove", toRemoveCount, toRemoveLines))
     }
     if (toAddLines.length > 0) {
-        newStuff += `<h1>${toAddCount} Cards To Add</h1><ul>`
-        for (const line of toAddLines) {
-            newStuff += `<li>${line}</li>`
-        }
-        newStuff += "</ul>"
+        newStuff += template(makeRenderDict("Add", toAddCount, toAddLines))
     }
 
     if (newStuff == "") {
