@@ -1,3 +1,14 @@
+let deltaTemplate = null
+
+function setUpTemplates() {
+    Handlebars.registerPartial(
+        "cardList",
+        document.getElementById("cardListPartialTemplate").innerHTML)
+
+    deltaTemplate = Handlebars.compile(
+        document.getElementById("deltaTemplate").innerHTML)
+}
+
 function loading() {
     return document.getElementById("loading")
 }
@@ -165,13 +176,12 @@ function renderDiff(diff) {
         target.push(makeRenderCard(card.id, card.name, absDelta, faction))
     }
 
-    const template = Handlebars.compile(document.getElementById("cardListTemplate").innerHTML)
     let newStuff = ""
     if (toRemoveLines.length > 0) {
-        newStuff += template(makeRenderDict("Remove", toRemoveCount, toRemoveLines))
+        newStuff += deltaTemplate(makeRenderDict("Remove", toRemoveCount, toRemoveLines))
     }
     if (toAddLines.length > 0) {
-        newStuff += template(makeRenderDict("Add", toAddCount, toAddLines))
+        newStuff += deltaTemplate(makeRenderDict("Add", toAddCount, toAddLines))
     }
 
     if (newStuff == "") {
@@ -208,6 +218,7 @@ window.addEventListener("load", () => {
     function hideResults() {
         result().style.display = "none"
     }
+    setUpTemplates()
     newDeck().addEventListener("input", hideResults)
     oldDeck().addEventListener("input", hideResults)
     goButton().addEventListener("click", () => {
