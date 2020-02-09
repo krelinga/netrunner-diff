@@ -143,55 +143,43 @@ function diffDecks(oldDeck, newDeck) {
 }
 
 function renderDiff(diff) {
-    function makeRenderCard(id, name, delta, faction) {
+    function makeRenderCards(diff) {
+        const renderCards = []
+        for (cardName in diff) {
+            const card = diff[cardName]
+            const signedDelta = card.decks.new.count - card.decks.old.count
+            const data = getCard(card.id)
+
+            renderCards.push({
+                id: card.id,
+                name: card.name,
+                delta: Math.abs(signedDelta),
+                action: signedDelta < 0 ? "Remove" : "Add",
+                faction: data ? data.faction_code : "Unknown"
+            })
+        }
+        return renderCards
+    }
+
+    function toDeltas(renderCards) {
+        function one(renderCards, kind) {
+            const cards = renderCards.filter(x => x.action == kind)
+            return {
+                "kind": kind,
+                "cards": cards,
+                "total": cards.reduce((t, x) => t + x.delta, 0)
+            }
+        }
         return {
-            id: id,
-            name: name,
-            delta: delta,
-            faction: faction
+            "delta": [
+                one(renderCards, "Remove"),
+                one(renderCards, "Add")
+            ].filter(x => x.total > 0)
         }
     }
 
-    function makeRenderDict(kind, total, cards) {
-        return {
-            kind: kind,
-            total: total,
-            cards: cards
-        }
-    }
-
-    const toAddLines = []
-    const toRemoveLines = []
-    let toAddCount = 0
-    let toRemoveCount = 0
-    for (cardName in diff) {
-        const card = diff[cardName]
-        const delta = card.decks.new.count - card.decks.old.count
-        const target = delta < 0 ? toRemoveLines : toAddLines
-        const absDelta = Math.abs(delta)
-        const cardData = getCard(card.id)
-        const faction = cardData ? cardData.faction_code : "Unknown"
-        if (delta < 0) {
-            toRemoveCount += absDelta
-        } else {
-            toAddCount += absDelta
-        }
-        target.push(makeRenderCard(card.id, card.name, absDelta, faction))
-    }
-
-    const topLevelRenderDict = {
-        delta: []
-    }
-    if (toRemoveLines.length > 0) {
-        topLevelRenderDict.delta.push(
-            makeRenderDict("Remove", toRemoveCount, toRemoveLines))
-    }
-    if (toAddLines.length > 0) {
-        topLevelRenderDict.delta.push(
-            makeRenderDict("Add", toAddCount, toAddLines))
-    }
-
-    result().innerHTML = resultTemplate(topLevelRenderDict)
+    const renderCards = makeRenderCards(diff)
+    result().innerHTML = resultTemplate(toDeltas(renderCards))
     result().style.display = "block"
 }
 
