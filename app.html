@@ -15,10 +15,19 @@
                 {{/each}}
             </ul>
         </script>
-        <!-- delta template -->
-        <script id="deltaTemplate" type="text/x-handlebars-template">
+        <!-- delta partial template -->
+        <script id="deltaPartialTemplate" type="text/x-handlebars-template">
             <h1>{{total}} Cards To {{kind}}</h1>
             {{>cardList cards=cards}}
+        </script>
+        <!-- result template -->
+        <script id="resultTemplate" type="text/x-handlebars-template">
+            {{#unless delta}}
+                <h1>No Differences!</h1>
+            {{/unless}}
+            {{#each delta}}
+                {{>delta delta=.}}
+            {{/each}}
         </script>
         <script src="app.js"></script>
     </head>

@@ -1,12 +1,15 @@
-let deltaTemplate = null
+let resultTemplate = null
 
 function setUpTemplates() {
     Handlebars.registerPartial(
         "cardList",
         document.getElementById("cardListPartialTemplate").innerHTML)
+    Handlebars.registerPartial(
+        "delta",
+        document.getElementById("deltaPartialTemplate").innerHTML)
 
-    deltaTemplate = Handlebars.compile(
-        document.getElementById("deltaTemplate").innerHTML)
+    resultTemplate = Handlebars.compile(
+        document.getElementById("resultTemplate").innerHTML)
 }
 
 function loading() {
@@ -176,19 +179,19 @@ function renderDiff(diff) {
         target.push(makeRenderCard(card.id, card.name, absDelta, faction))
     }
 
-    let newStuff = ""
+    const topLevelRenderDict = {
+        delta: []
+    }
     if (toRemoveLines.length > 0) {
-        newStuff += deltaTemplate(makeRenderDict("Remove", toRemoveCount, toRemoveLines))
+        topLevelRenderDict.delta.push(
+            makeRenderDict("Remove", toRemoveCount, toRemoveLines))
     }
     if (toAddLines.length > 0) {
-        newStuff += deltaTemplate(makeRenderDict("Add", toAddCount, toAddLines))
+        topLevelRenderDict.delta.push(
+            makeRenderDict("Add", toAddCount, toAddLines))
     }
 
-    if (newStuff == "") {
-        newStuff = "<h1>No Differences!</h1>"
-    }
-
-    result().innerHTML = newStuff
+    result().innerHTML = resultTemplate(topLevelRenderDict)
     result().style.display = "block"
 }
 
