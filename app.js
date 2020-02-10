@@ -170,7 +170,7 @@ function renderDiff(diff) {
                 name: card.name,
                 delta: Math.abs(signedDelta),
                 action: signedDelta < 0 ? "Remove" : "Add",
-                faction: data ? data.faction_code : "Unknown Faction",
+                faction: data ? capFirstLetter(data.faction_code) : "Unknown Faction",
                 type: getType(data.type_code, data.keywords)
             })
         }
