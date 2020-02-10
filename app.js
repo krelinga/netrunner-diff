@@ -147,6 +147,13 @@ function diffDecks(oldDeck, newDeck) {
 
 function renderDiff(diff) {
     function makeRenderCards(diff) {
+        function getType(rawType, rawKeywords) {
+            if (rawKeywords && rawKeywords.includes("Icebreaker")) {
+                return "icebreaker"
+            }
+            if (rawType) return rawType
+            return "Unknown Type"
+        }
         const renderCards = []
         for (cardName in diff) {
             const card = diff[cardName]
@@ -159,8 +166,7 @@ function renderDiff(diff) {
                 delta: Math.abs(signedDelta),
                 action: signedDelta < 0 ? "Remove" : "Add",
                 faction: data ? data.faction_code : "Unknown Faction",
-                type: data ? data.type_code : "Unknown Type",
-                keywords: data ? (data.keywords ? data.keywords : null) : null
+                type: getType(data.type_code, data.keywords)
             })
         }
         return renderCards
