@@ -14,10 +14,17 @@
                 {{/each}}
             </ul>
         </script>
+        <!-- type partial template -->
+        <script id="typePartialTemplate" type="text/x-handlebars-template">
+            <h3>{{total}} {{name}} Cards</h2>
+            {{>cardList cards=cards}}
+        </script>
         <!-- faction partial template -->
         <script id="factionPartialTemplate" type="text/x-handlebars-template">
             <h2>{{total}} {{name}} Cards</h2>
-            {{>cardList cards=cards}}
+            {{#each type}}
+                {{>type}}
+            {{/each}}
         </script>
         <!-- delta partial template -->
         <script id="deltaPartialTemplate" type="text/x-handlebars-template">

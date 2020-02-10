@@ -5,6 +5,9 @@ function setUpTemplates() {
         "cardList",
         document.getElementById("cardListPartialTemplate").innerHTML)
     Handlebars.registerPartial(
+        "type",
+        document.getElementById("typePartialTemplate").innerHTML)
+    Handlebars.registerPartial(
         "faction",
         document.getElementById("factionPartialTemplate").innerHTML)
     Handlebars.registerPartial(
@@ -189,13 +192,26 @@ function renderDiff(diff) {
         return renderCards
     }
 
-    function toFactions(renderCards) {
-        function one(renderCards, faction) {
-            const cards = renderCards.filter(x => x.faction == faction)
+    function toTypes(renderCards) {
+        function one(renderCards, type) {
+            const cards = renderCards.filter(x => x.type == type)
             return {
-                "name": faction,
+                "name": type,
                 "cards": cards,
                 "total": cards.reduce((t, x) => t + x.delta, 0)
+            }
+        }
+        const types = toUnique(renderCards.map(x => x.type))
+        return types.map(x => one(renderCards, x)).filter(x => x.total > 0)
+    }
+
+    function toFactions(renderCards) {
+        function one(renderCards, faction) {
+            const types = toTypes(renderCards.filter(x => x.faction == faction))
+            return {
+                "name": faction,
+                "type": types,
+                "total": types.reduce((t, x) => t + x.total, 0)
             }
         }
         const factions = toUnique(renderCards.map(x => x.faction))
