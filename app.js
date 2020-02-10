@@ -158,7 +158,9 @@ function renderDiff(diff) {
                 name: card.name,
                 delta: Math.abs(signedDelta),
                 action: signedDelta < 0 ? "Remove" : "Add",
-                faction: data ? data.faction_code : "Unknown"
+                faction: data ? data.faction_code : "Unknown Faction",
+                type: data ? data.type_code : "Unknown Type",
+                keywords: data ? (data.keywords ? data.keywords : null) : null
             })
         }
         return renderCards
