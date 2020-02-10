@@ -18,7 +18,7 @@ li {
 }
 
 ul {
-    columns: 5;
+    columns: 4;
 }
 
 /* a class to apply to images to mark them as "done" */
