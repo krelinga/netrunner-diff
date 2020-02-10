@@ -5,6 +5,9 @@ function setUpTemplates() {
         "cardList",
         document.getElementById("cardListPartialTemplate").innerHTML)
     Handlebars.registerPartial(
+        "faction",
+        document.getElementById("factionPartialTemplate").innerHTML)
+    Handlebars.registerPartial(
         "delta",
         document.getElementById("deltaPartialTemplate").innerHTML)
 
@@ -161,13 +164,33 @@ function renderDiff(diff) {
         return renderCards
     }
 
-    function toDeltas(renderCards) {
-        function one(renderCards, kind) {
-            const cards = renderCards.filter(x => x.action == kind)
+    function toFactions(renderCards) {
+        function one(renderCards, faction) {
+            const cards = renderCards.filter(x => x.faction == faction)
             return {
-                "kind": kind,
+                "name": faction,
                 "cards": cards,
                 "total": cards.reduce((t, x) => t + x.delta, 0)
+            }
+        }
+        const factionDict = {}
+        for (const x of renderCards.map(x => x.faction)) {
+            factionDict[x] = 1
+        }
+        const factions = []
+        for (const x in factionDict) {
+            factions.push(x)
+        }
+        return factions.map(x => one(renderCards, x)).filter(x => x.total > 0)
+    }
+
+    function toDeltas(renderCards) {
+        function one(renderCards, kind) {
+            const factions = toFactions(renderCards.filter(x => x.action == kind))
+            return {
+                "kind": kind,
+                "faction": factions,
+                "total": factions.reduce((t, x) => t + x.total, 0)
             }
         }
         return {
@@ -179,6 +202,7 @@ function renderDiff(diff) {
     }
 
     const renderCards = makeRenderCards(diff)
+    console.log(toDeltas(renderCards))
     result().innerHTML = resultTemplate(toDeltas(renderCards))
     result().style.display = "block"
 }

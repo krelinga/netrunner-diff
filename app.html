@@ -10,15 +10,21 @@
                         {{this.delta}}x
                         <a href="https://netrunnerdb.com/en/card/{{this.id}}">
                             {{this.name}}</a>
-                        {{this.faction}}
                     </li>
                 {{/each}}
             </ul>
         </script>
+        <!-- faction partial template -->
+        <script id="factionPartialTemplate" type="text/x-handlebars-template">
+            <h2>{{total}} {{name}} cards</h2>
+            {{>cardList cards=cards}}
+        </script>
         <!-- delta partial template -->
         <script id="deltaPartialTemplate" type="text/x-handlebars-template">
             <h1>{{total}} Cards To {{kind}}</h1>
-            {{>cardList cards=cards}}
+            {{#each faction}}
+                {{>faction faction=.}}
+            {{/each}}
         </script>
         <!-- result template -->
         <script id="resultTemplate" type="text/x-handlebars-template">
