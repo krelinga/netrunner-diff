@@ -8,3 +8,7 @@ textarea {
 #mainApp {
     display: none;
 }
+
+img {
+    max-height: 150px;
+}
