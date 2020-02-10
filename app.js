@@ -277,6 +277,10 @@ function getCard(cardId) {
     return null
 }
 
+function toggleImage(event) {
+    if (event.target.tagName != "IMG") return
+    event.target.classList.toggle("dull")
+}
 
 window.addEventListener("load", () => {
     function hideResults() {
@@ -291,5 +295,6 @@ window.addEventListener("load", () => {
         const diff = diffDecks(oldDeckCards, newDeckCards)
         renderDiff(diff)
     })
+    result().addEventListener("click", toggleImage)
     loadCardsDb()
 });

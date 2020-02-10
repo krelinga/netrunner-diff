@@ -20,3 +20,8 @@ li {
 ul {
     columns: 5;
 }
+
+/* a class to apply to images to mark them as "done" */
+.dull {
+    filter: opacity(0.25);
+}
