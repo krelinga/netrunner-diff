@@ -47,6 +47,11 @@ function toRemove() {
     return document.getElementById("toRemove")
 }
 
+function capFirstLetter(inString) {
+    if (!inString) return inString
+    return inString.charAt(0).toUpperCase() + inString.substr(1)
+}
+
 function parseDeckMarkdown(markdown) {
     function parseOneLine(line) {
         function matchIdentityCard(line) {
@@ -149,9 +154,9 @@ function renderDiff(diff) {
     function makeRenderCards(diff) {
         function getType(rawType, rawKeywords) {
             if (rawKeywords && rawKeywords.includes("Icebreaker")) {
-                return "icebreaker"
+                return "Icebreaker"
             }
-            if (rawType) return rawType
+            if (rawType) return capFirstLetter(rawType)
             return "Unknown Type"
         }
         const renderCards = []
