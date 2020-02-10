@@ -174,6 +174,12 @@ function renderDiff(diff) {
             if (rawType) return capFirstLetter(rawType)
             return "Unknown Type"
         }
+        function getImageUrl(id, data) {
+            if (!data) return null
+            if (data.image_url) return data.image_url
+            const imageUrlTemplate = "https://netrunnerdb.com/card_image/{code}.png"
+            return imageUrlTemplate.replace("{code}", id)
+        }
         const renderCards = []
         for (cardName in diff) {
             const card = diff[cardName]
@@ -186,7 +192,8 @@ function renderDiff(diff) {
                 delta: Math.abs(signedDelta),
                 action: signedDelta < 0 ? "Remove" : "Add",
                 faction: data ? capFirstLetter(data.faction_code) : "Unknown Faction",
-                type: getType(data.type_code, data.keywords)
+                type: getType(data.type_code, data.keywords),
+                imageUrl: getImageUrl(card.id, data)
             })
         }
         return renderCards
