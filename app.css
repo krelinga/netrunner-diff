@@ -12,3 +12,7 @@ textarea {
 img {
     max-height: 150px;
 }
+
+ul {
+    columns: 5;
+}

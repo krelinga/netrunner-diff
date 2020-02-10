@@ -7,11 +7,9 @@
             <ul>
                 {{#each cards}}
                     <li>
-                        <div>
-                            {{this.delta}}x
-                            <a href="https://netrunnerdb.com/en/card/{{this.id}}">
-                                {{this.name}}</a>
-                        </div>
+                        {{this.delta}}x
+                        <a href="https://netrunnerdb.com/en/card/{{this.id}}">
+                            {{this.name}}</a><br />
                         {{#if this.imageUrl}}
                             <img src="{{this.imageUrl}}" />
                         {{/if}}
