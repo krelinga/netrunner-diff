@@ -52,6 +52,18 @@ function capFirstLetter(inString) {
     return inString.charAt(0).toUpperCase() + inString.substr(1)
 }
 
+function toUnique(inArray) {
+    const entries = {}
+    for (const x of inArray) {
+        entries[x] = 1
+    }
+    const out = []
+    for (const x in entries) {
+        out.push(x)
+    }
+    return out
+}
+
 function parseDeckMarkdown(markdown) {
     function parseOneLine(line) {
         function matchIdentityCard(line) {
@@ -186,14 +198,7 @@ function renderDiff(diff) {
                 "total": cards.reduce((t, x) => t + x.delta, 0)
             }
         }
-        const factionDict = {}
-        for (const x of renderCards.map(x => x.faction)) {
-            factionDict[x] = 1
-        }
-        const factions = []
-        for (const x in factionDict) {
-            factions.push(x)
-        }
+        const factions = toUnique(renderCards.map(x => x.faction))
         return factions.map(x => one(renderCards, x)).filter(x => x.total > 0)
     }
 
