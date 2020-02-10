@@ -23,7 +23,7 @@
         <script id="deltaPartialTemplate" type="text/x-handlebars-template">
             <h1>{{total}} Cards To {{kind}}</h1>
             {{#each faction}}
-                {{>faction faction=.}}
+                {{>faction}}
             {{/each}}
         </script>
         <!-- result template -->
@@ -32,7 +32,7 @@
                 <h1>No Differences!</h1>
             {{/unless}}
             {{#each delta}}
-                {{>delta delta=.}}
+                {{>delta}}
             {{/each}}
         </script>
         <script src="app.js"></script>
