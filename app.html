@@ -10,9 +10,9 @@
                         {{this.delta}}x
                         <a href="https://netrunnerdb.com/en/card/{{this.id}}">
                             {{this.name}}</a><br />
-                        {{#if this.imageUrl}}
-                            <img src="{{this.imageUrl}}" />
-                        {{/if}}
+                        {{#each this.imageUrl}}
+                            <img src="{{this}}" />
+                        {{/each}}
                     </li>
                 {{/each}}
             </ul>

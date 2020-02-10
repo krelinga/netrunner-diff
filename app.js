@@ -180,6 +180,14 @@ function renderDiff(diff) {
             const imageUrlTemplate = "https://netrunnerdb.com/card_image/{code}.png"
             return imageUrlTemplate.replace("{code}", id)
         }
+        function copies(n, thing) {
+            if (!thing) return thing
+            const toReturn = []
+            for (let i = 0; i < n; ++i) {
+                toReturn.push(thing)
+            }
+            return toReturn
+        }
         const renderCards = []
         for (cardName in diff) {
             const card = diff[cardName]
@@ -193,7 +201,7 @@ function renderDiff(diff) {
                 action: signedDelta < 0 ? "Remove" : "Add",
                 faction: data ? capFirstLetter(data.faction_code) : "Unknown Faction",
                 type: getType(data.type_code, data.keywords),
-                imageUrl: getImageUrl(card.id, data)
+                imageUrl: copies(Math.abs(signedDelta), getImageUrl(card.id, data))
             })
         }
         return renderCards
